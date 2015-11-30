@@ -95,7 +95,6 @@
             
             startLocation = [sender locationInView:self.contentView].x;
             CGFloat direction = [sender velocityInView:self.contentView].x;
-            NSLog(@"----->>>%@",@(direction));
             if (direction < 0) {
                 if ([self.delegate respondsToSelector:@selector(tableViewCellWillShow:)])
                 {
@@ -118,6 +117,7 @@
             startLocation = vCurrentLocation;
             CGRect vCurrentRect = self.myContentView.frame;
             CGFloat vOriginX = MAX(-[self getMenusWidth] - Bounds, vCurrentRect.origin.x + vDistance);
+            
             vOriginX = MIN(0 + Bounds, vOriginX);
             self.myContentView.frame = CGRectMake(vOriginX, vCurrentRect.origin.y, vCurrentRect.size.width, vCurrentRect.size.height);
             CGFloat direction = [sender velocityInView:self.contentView].x;
