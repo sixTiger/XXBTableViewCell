@@ -11,7 +11,7 @@
 #import "XXBTableViewCell.h"
 #import "XXBModel.h"
 #import "UITableView+SelfSizing.h"
-#define cellCount 20
+#define cellCount 5
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource,XXBSweepTableViewCellDelegate>
 @property(nonatomic , strong) UITableView           *tableView;
 @property(nonatomic,strong)NSMutableArray           *dataSourceArray;
@@ -110,8 +110,15 @@
 {
     [cell hideMenuView:YES Animated:YES];
     NSIndexPath *indexpath = [self.tableView indexPathForCell:cell];
+    NSIndexPath *indexpath0 = [NSIndexPath indexPathForRow:3 inSection:0];
+    NSIndexPath *indexpath1 = [NSIndexPath indexPathForRow:2 inSection:0];
+    
     [self.dataSourceArray[indexpath.section] removeObjectAtIndex:indexpath.row];
-    [self.tableView deleteRowsAtIndexPaths:@[indexpath] withRowAnimation:UITableViewRowAnimationTop];
+    
+    [self.dataSourceArray[0] removeObjectAtIndex:3];
+    
+    [self.dataSourceArray[0] removeObjectAtIndex:2];
+    [self.tableView deleteRowsAtIndexPaths:@[indexpath,indexpath0,indexpath1] withRowAnimation:UITableViewRowAnimationTop];
 }
 - (void)tableViewCellWillShow:(XXBSweepTableViewCell *)cell
 {

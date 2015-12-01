@@ -308,9 +308,22 @@ static CGFloat const _SelfSizingCellHeightCacheAbsentValue = -1;
 {
     if (self.p_autoCacheInvalidationEnabled) {
         [self.p_cellHeightCache buildHeightCachesAtIndexPathsIfNeeded:indexPaths];
+        
+        __block NSMutableDictionary *mutableIndexSetsToRemove = @{}.mutableCopy;
         [indexPaths enumerateObjectsUsingBlock:^(NSIndexPath *indexPath, NSUInteger idx, BOOL *stop) {
-            NSMutableArray *rows = self.p_cellHeightCache.sections[indexPath.section];
-            [rows removeObjectAtIndex:indexPath.row];
+            NSMutableIndexSet *mutableIndexSet = mutableIndexSetsToRemove[@(indexPath.section)];
+            if (!mutableIndexSet)
+            {
+                mutableIndexSet = [NSMutableIndexSet indexSet];
+                mutableIndexSetsToRemove[@(indexPath.section)] = mutableIndexSet;
+            }
+            [mutableIndexSet addIndex:indexPath.row];
+        }];
+        
+        [mutableIndexSetsToRemove enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, NSIndexSet *indexSet, BOOL *stop) {
+            NSMutableArray *rows = self.p_cellHeightCache.sections[key.integerValue];
+            [rows removeObjectsAtIndexes:indexSet];
+            NSLog(@"%@",rows);
         }];
     }
     [self s_deleteRowsAtIndexPaths:indexPaths withRowAnimation:animation];
