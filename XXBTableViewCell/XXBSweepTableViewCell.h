@@ -29,6 +29,14 @@
  */
 @property(nonatomic , weak , readonly) UIView                   *myContentView;
 /**
+ *  距离顶部的边距
+ */
+@property(nonatomic , assign) CGFloat                           marginTop;
+/**
+ *  距离底部的边距
+ */
+@property(nonatomic , assign) CGFloat                           marginBottom;
+/**
  *  隐藏已经显示按钮菜单的View
  *
  *  @param aHide    是否隐藏

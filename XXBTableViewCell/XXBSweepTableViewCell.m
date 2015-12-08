@@ -19,6 +19,7 @@
 }
 @property(nonatomic , strong) NSMutableArray    *buttonArray;
 @property(nonatomic , weak ) UIView             *myContentView;
+@property(nonatomic , strong) UIColor           *myContentViewColor;
 @end
 
 @implementation XXBSweepTableViewCell
@@ -35,15 +36,15 @@
 {
     [super layoutSubviews];
     self.contentView.backgroundColor = [UIColor myRandomColor];
-    self.myContentView.frame = self.contentView.frame;
     NSInteger buttonCount = self.buttonArray.count;
     UIButton *button;
     CGFloat selfWidth = CGRectGetWidth(self.contentView.frame);
-    CGFloat selfHeight = CGRectGetHeight(self.contentView.frame);
+    CGFloat selfHeight = CGRectGetHeight(self.myContentView.frame);
+    CGFloat y = CGRectGetMinY(self.myContentView.frame);
     for (NSInteger i = 0; i < buttonCount; i++)
     {
         button = self.buttonArray[i];
-        button.frame = CGRectMake(selfWidth - (i + 1) * ButtonWidth, 0, ButtonWidth,selfHeight);
+        button.frame = CGRectMake(selfWidth - (i + 1) * ButtonWidth, y, ButtonWidth,selfHeight);
     }
 }
 - (void)p_creatButtons
@@ -150,11 +151,11 @@
     CGRect vDestinaRect = CGRectZero;
     if (isHiden)
     {
-        vDestinaRect = self.contentView.frame;
+        vDestinaRect = CGRectMake(0, self.myContentView.frame.origin.y, self.myContentView.frame.size.width, self.myContentView.frame.size.height);;
     }
     else
     {
-        vDestinaRect = CGRectMake(-[self getMenusWidth], self.contentView.frame.origin.x, self.contentView.frame.size.width, self.contentView.frame.size.height);
+        vDestinaRect = CGRectMake(-[self getMenusWidth], self.myContentView.frame.origin.y, self.myContentView.frame.size.width, self.myContentView.frame.size.height);
     }
     CGFloat vDuration = aAnimate? 0.25 : 0.0;
     [UIView animateWithDuration:vDuration animations:^{
@@ -192,10 +193,25 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
+    if (selected)
+    {
+        self.myContentView.backgroundColor = [UIColor lightGrayColor];
+    }
+    else
+    {
+        self.myContentView.backgroundColor = [UIColor whiteColor];
+    }
 }
 -(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
 {
-    
+    if (highlighted)
+    {
+        self.myContentView.backgroundColor = [UIColor lightGrayColor];
+    }
+    else
+    {
+        self.myContentView.backgroundColor = [UIColor whiteColor];
+    }
 }
 - (NSMutableArray *)buttonArray
 {
@@ -216,14 +232,14 @@
 {
     if (_myContentView == nil) {
         UIView *myContentView = [[UIView alloc] initWithFrame:self.contentView.bounds];
-        myContentView.backgroundColor = [UIColor grayColor];
+        myContentView.backgroundColor = [UIColor whiteColor];
         _myContentView = myContentView;
         [self.contentView addSubview:myContentView];
         myContentView.translatesAutoresizingMaskIntoConstraints = NO;
         NSLayoutConstraint *lcLeft = [NSLayoutConstraint constraintWithItem:myContentView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
-        NSLayoutConstraint *lcTop = [NSLayoutConstraint constraintWithItem:myContentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0];
+        NSLayoutConstraint *lcTop = [NSLayoutConstraint constraintWithItem:myContentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:5];
         NSLayoutConstraint *lcRight = [NSLayoutConstraint constraintWithItem:myContentView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0];
-        NSLayoutConstraint *lcBottom = [NSLayoutConstraint constraintWithItem:myContentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
+        NSLayoutConstraint *lcBottom = [NSLayoutConstraint constraintWithItem:myContentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-5];
         [self.contentView addConstraints:@[lcLeft, lcTop, lcRight ,lcBottom]];
         
     }
