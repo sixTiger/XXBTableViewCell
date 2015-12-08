@@ -43,4 +43,5 @@
  *  @param aAnimate 是否动画
  */
 -(void)hideMenuView:(BOOL)isHiden Animated:(BOOL)aAnimate;
+
 @end

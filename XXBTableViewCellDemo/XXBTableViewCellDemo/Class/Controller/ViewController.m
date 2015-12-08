@@ -125,14 +125,17 @@
     if (self.selectCell && self.selectCell != cell)
     {
         [self.selectCell hideMenuView:YES Animated:YES];
+        [cell hideMenuView:YES Animated:YES];
         self.selectCell = nil;
     }
+    self.selectCell = (XXBTableViewCell *)cell;
 }
 - (void)tableViewCellDidShow:(XXBTableViewCell *)cell
 {
-    self.selectCell = cell;
+    
 }
 - (void)tableViewCellDidHide:(XXBSweepTableViewCell *)cell
 {
+    self.selectCell = nil;
 }
 @end

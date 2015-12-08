@@ -17,9 +17,10 @@
     CGFloat startLocation;
     BOOL    hideMenuView;
 }
-@property(nonatomic , strong) NSMutableArray    *buttonArray;
-@property(nonatomic , weak ) UIView             *myContentView;
-@property(nonatomic , strong) UIColor           *myContentViewColor;
+@property(nonatomic , strong) UIPanGestureRecognizer    *panGesture;
+@property(nonatomic , strong) NSMutableArray            *buttonArray;
+@property(nonatomic , weak ) UIView                     *myContentView;
+@property(nonatomic , strong) UIColor                   *myContentViewColor;
 @end
 
 @implementation XXBSweepTableViewCell
@@ -86,6 +87,7 @@
 - (void)p_addGesture
 {
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    self.panGesture = panGesture;
     panGesture.delegate = self;
     [self.contentView addGestureRecognizer:panGesture];
 }
@@ -144,7 +146,14 @@
             break;
     }
 }
--(void)hideMenuView:(BOOL)isHiden Animated:(BOOL)aAnimate{
+-(void)hideMenuView:(BOOL)isHiden Animated:(BOOL)aAnimate {
+    NSLog(@"+++++++");
+    self.userInteractionEnabled = NO;
+    self.panGesture.enabled = NO;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.userInteractionEnabled = YES;
+        self.panGesture.enabled = YES;
+    });
     if (self.selected) {
         [self setSelected:NO animated:NO];
     }
