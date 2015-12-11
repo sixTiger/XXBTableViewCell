@@ -11,7 +11,7 @@
 #import "XXBTableViewCell.h"
 #import "XXBModel.h"
 #import "UITableView+SelfSizing.h"
-#define cellCount 5
+#define cellCount 10
 @interface ViewController ()<UITableViewDelegate,UITableViewDataSource,XXBSweepTableViewCellDelegate>
 @property(nonatomic , strong) UITableView           *tableView;
 @property(nonatomic,strong)NSMutableArray           *dataSourceArray;
@@ -82,8 +82,8 @@
             for (int i =0 ; i< cellCount; i++)
             {
                 XXBModel  * model = [XXBModel new];
-                model.text1 = [string substringToIndex:arc4random_uniform(50)];
-                model.text2 = [string substringToIndex:arc4random_uniform(50)];
+                model.text1 = [string substringToIndex:(arc4random_uniform(50) + 10)];
+                model.text2 = [string substringToIndex:(arc4random_uniform(50) + 10)];
                 [array addObject:model];
             }
             [_dataSourceArray addObject:array];
@@ -109,16 +109,16 @@
 - (void)tableViewCell:(XXBSweepTableViewCell *)cell didClickWithButtonIndex:(NSInteger)buttonIndex
 {
     [cell hideMenuView:YES Animated:YES];
-    NSIndexPath *indexpath = [self.tableView indexPathForCell:cell];
-    NSIndexPath *indexpath0 = [NSIndexPath indexPathForRow:3 inSection:0];
-    NSIndexPath *indexpath1 = [NSIndexPath indexPathForRow:2 inSection:0];
-    
-    [self.dataSourceArray[indexpath.section] removeObjectAtIndex:indexpath.row];
-    
-    [self.dataSourceArray[0] removeObjectAtIndex:3];
-    
-    [self.dataSourceArray[0] removeObjectAtIndex:2];
-    [self.tableView deleteRowsAtIndexPaths:@[indexpath,indexpath0,indexpath1] withRowAnimation:UITableViewRowAnimationTop];
+//    NSIndexPath *indexpath = [self.tableView indexPathForCell:cell];
+//    NSIndexPath *indexpath0 = [NSIndexPath indexPathForRow:3 inSection:0];
+//    NSIndexPath *indexpath1 = [NSIndexPath indexPathForRow:2 inSection:0];
+//    
+//    [self.dataSourceArray[indexpath.section] removeObjectAtIndex:indexpath.row];
+//    
+//    [self.dataSourceArray[0] removeObjectAtIndex:3];
+//    
+//    [self.dataSourceArray[0] removeObjectAtIndex:2];
+//    [self.tableView deleteRowsAtIndexPaths:@[indexpath,indexpath0,indexpath1] withRowAnimation:UITableViewRowAnimationTop];
 }
 - (void)tableViewCellWillShow:(XXBSweepTableViewCell *)cell
 {

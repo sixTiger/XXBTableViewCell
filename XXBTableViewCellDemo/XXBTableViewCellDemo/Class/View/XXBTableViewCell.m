@@ -97,11 +97,7 @@
     _model = model;
     self.label1.text = model.text1;
     self.label2.text = model.text2;
-    
     self.label3.text = model.text2;
-    
-    [self setNeedsUpdateConstraints];
-    [self updateConstraintsIfNeeded];
 }
 - (void)layoutSubviews
 {
