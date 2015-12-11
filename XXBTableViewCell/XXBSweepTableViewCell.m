@@ -36,6 +36,7 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    [self layoutIfNeeded];
     self.contentView.backgroundColor = [UIColor myRandomColor];
     NSInteger buttonCount = self.buttonArray.count;
     UIButton *button;
@@ -240,7 +241,7 @@
 - (UIView *)myContentView
 {
     if (_myContentView == nil) {
-        UIView *myContentView = [[UIView alloc] initWithFrame:self.contentView.bounds];
+        UIView *myContentView = [[UIView alloc] initWithFrame:self.bounds];
         myContentView.backgroundColor = [UIColor whiteColor];
         _myContentView = myContentView;
         [self.contentView addSubview:myContentView];
