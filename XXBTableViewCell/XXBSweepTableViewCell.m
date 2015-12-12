@@ -24,6 +24,7 @@
 @end
 
 @implementation XXBSweepTableViewCell
+
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
@@ -33,14 +34,20 @@
     }
     return self;
 }
+
 - (void)layoutSubviews
 {
     [super layoutSubviews];
     [self layoutIfNeeded];
+    NSLog(@"-------->>>>>>\n%@\n%@",NSStringFromCGRect(self.myContentView.frame),NSStringFromCGRect(self.contentView.frame));
     NSInteger buttonCount = self.buttonArray.count;
     UIButton *button;
     CGFloat selfWidth = CGRectGetWidth(self.contentView.frame);
     CGFloat selfHeight = CGRectGetHeight(self.myContentView.frame);
+    if (selfHeight == 44)
+    {
+        [self setNeedsLayout];
+    }
     CGFloat y = CGRectGetMinY(self.myContentView.frame);
     for (NSInteger i = 0; i < buttonCount; i++)
     {
@@ -48,6 +55,7 @@
         button.frame = CGRectMake(selfWidth - (i + 1) * ButtonWidth, y, ButtonWidth,selfHeight);
     }
 }
+
 - (void)p_creatButtons
 {
     [self.buttonArray makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -71,6 +79,7 @@
         [self.buttonArray addObject:button];
     }
 }
+
 - (void)p_buttonClick:(UIButton *)clickButton
 {
     if ([self.delegate respondsToSelector:@selector(tableViewCell:didClickWithButtonIndex:)])
@@ -78,6 +87,7 @@
         [self.delegate tableViewCell:self didClickWithButtonIndex:[self.buttonArray indexOfObject:clickButton]];
     }
 }
+
 - (void)prepareForReuse
 {
     [super prepareForReuse];
@@ -91,6 +101,7 @@
     panGesture.delegate = self;
     [self.contentView addGestureRecognizer:panGesture];
 }
+
 -(void)handlePan:(UIPanGestureRecognizer *)sender{
     switch (sender.state) {
         case UIGestureRecognizerStateBegan:
@@ -146,8 +157,8 @@
             break;
     }
 }
+
 -(void)hideMenuView:(BOOL)isHiden Animated:(BOOL)aAnimate {
-    NSLog(@"+++++++");
     self.userInteractionEnabled = NO;
     self.panGesture.enabled = NO;
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -194,6 +205,7 @@
     }
     return YES;
 }
+
 - (CGFloat)getMenusWidth
 {
     return ButtonWidth * self.buttonArray.count;
@@ -211,6 +223,7 @@
         self.myContentView.backgroundColor = [UIColor whiteColor];
     }
 }
+
 -(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
 {
     if (highlighted)
@@ -222,6 +235,7 @@
         self.myContentView.backgroundColor = [UIColor whiteColor];
     }
 }
+
 - (NSMutableArray *)buttonArray
 {
     if (_buttonArray == nil) {
@@ -229,6 +243,7 @@
     }
     return _buttonArray;
 }
+
 - (NSArray *)buttonMessageArray
 {
     if(_buttonMessageArray == nil)
@@ -237,6 +252,7 @@
     }
     return _buttonMessageArray;
 }
+
 - (UIView *)myContentView
 {
     if (_myContentView == nil) {
