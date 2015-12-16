@@ -23,6 +23,8 @@
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self p_creatTableView];
+        self.buttonMessageArray = @[[UIImage imageNamed:@"video"],@"删除",@"添加"];
+        self.myContentView.backgroundColor = [UIColor whiteColor];
     }
     return  self;
 }
@@ -105,8 +107,8 @@
     [self.myContentView setNeedsLayout];
     [self.myContentView layoutIfNeeded];
     
-    self.label1.preferredMaxLayoutWidth = CGRectGetWidth(self.label1.frame);
-    self.label2.preferredMaxLayoutWidth = CGRectGetWidth(self.label2.frame);
+//    self.label1.preferredMaxLayoutWidth = CGRectGetWidth(self.label1.frame);
+//    self.label2.preferredMaxLayoutWidth = CGRectGetWidth(self.label2.frame);
 }
 - (void)updateConstraints
 {

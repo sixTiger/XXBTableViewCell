@@ -2,8 +2,8 @@
 //  UITableView+SelfSizing.h
 //  SinaBlog
 //
-//  Created by Robin on 8/10/15.
-//  Copyright © 2015 Robin. All rights reserved.
+//  Created by xiaobing on 8/10/14.
+//  Copyright © 2015 xiaobing. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

@@ -59,13 +59,30 @@
 }
 - (void)configureCell:(XXBTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row < [self.dataSourceArray[indexPath.section] count] - 1)
+    {
+        cell.marginBottom = 20;
+    }
+    else
+    {
+        cell.marginBottom = 0;
+    }
     cell.model = self.dataSourceArray[indexPath.section][indexPath.row];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     XXBTableViewCell *cell = [[XXBTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+    cell.contentView.backgroundColor = [UIColor lightGrayColor];
     cell.model = self.dataSourceArray[indexPath.section][indexPath.row];
     cell.delegate = self;
+    if (indexPath.row < [self.dataSourceArray[indexPath.section] count] - 1)
+    {
+        cell.marginBottom = 20;
+    }
+    else
+    {
+        cell.marginBottom = 0;
+    }
     return cell;
 }
 
@@ -74,9 +91,9 @@
     if (_dataSourceArray == nil)
     {
         NSString *string = @"１９７５年二、三月间，一个平平常常的日子，细蒙蒙的雨丝夹着一星半点的雪花，正纷纷淋淋地向大地飘洒着。时令已快到惊蛰，雪当然再不会存留，往往还没等落地，就已经消失得无踪无影了。黄土高原严寒而漫长的冬天看来就要过去，但那真正温暖的春天还远远地没有到来。在这样雨雪交加的日子里，如果没有什么紧要事，人们宁愿一整天足不出户。因此，县城的大街小巷倒也比平时少了许多嘈杂。街巷背阴的地方。冬天残留的积雪和冰溜子正在雨点的敲击下蚀化，石板街上到处都漫流着肮脏的污水。风依然是寒冷的。空荡荡的街道上，有时会偶尔走过来一个乡下人，破毡帽护着脑门，胳膊上挽一筐子土豆或萝卜，有气无力地呼唤着买主";
-//        int stringLength = (int)string.length;
+        //        int stringLength = (int)string.length;
         _dataSourceArray = [NSMutableArray array];
-        for (int j = 0; j < 3; j++)
+        for (int j = 0; j < 1; j++)
         {
             NSMutableArray *array = [NSMutableArray array];
             for (int i =0 ; i< cellCount; i++)
@@ -109,16 +126,6 @@
 - (void)tableViewCell:(XXBSweepTableViewCell *)cell didClickWithButtonIndex:(NSInteger)buttonIndex
 {
     [cell hideMenuView:YES Animated:YES];
-//    NSIndexPath *indexpath = [self.tableView indexPathForCell:cell];
-//    NSIndexPath *indexpath0 = [NSIndexPath indexPathForRow:3 inSection:0];
-//    NSIndexPath *indexpath1 = [NSIndexPath indexPathForRow:2 inSection:0];
-//    
-//    [self.dataSourceArray[indexpath.section] removeObjectAtIndex:indexpath.row];
-//    
-//    [self.dataSourceArray[0] removeObjectAtIndex:3];
-//    
-//    [self.dataSourceArray[0] removeObjectAtIndex:2];
-//    [self.tableView deleteRowsAtIndexPaths:@[indexpath,indexpath0,indexpath1] withRowAnimation:UITableViewRowAnimationTop];
 }
 - (void)tableViewCellWillShow:(XXBSweepTableViewCell *)cell
 {

@@ -14,13 +14,17 @@
 #define Bounds          10
 @interface XXBSweepTableViewCell ()<UIGestureRecognizerDelegate>
 {
-    CGFloat startLocation;
-    BOOL    hideMenuView;
+    CGFloat                     startLocation;
+    BOOL                        hideMenuView;
+    NSMutableArray              *_myContentViewLayouts;
+    NSArray                     *_buttonMessageArray;
+    
 }
 @property(nonatomic , strong) UIPanGestureRecognizer    *panGesture;
 @property(nonatomic , strong) NSMutableArray            *buttonArray;
 @property(nonatomic , weak ) UIView                     *myContentView;
 @property(nonatomic , strong) UIColor                   *myContentViewColor;
+@property(nonatomic , strong) NSMutableArray            *myContentViewLayouts;
 @end
 
 @implementation XXBSweepTableViewCell
@@ -39,15 +43,10 @@
 {
     [super layoutSubviews];
     [self layoutIfNeeded];
-    NSLog(@"-------->>>>>>\n%@\n%@",NSStringFromCGRect(self.myContentView.frame),NSStringFromCGRect(self.contentView.frame));
     NSInteger buttonCount = self.buttonArray.count;
     UIButton *button;
     CGFloat selfWidth = CGRectGetWidth(self.contentView.frame);
     CGFloat selfHeight = CGRectGetHeight(self.myContentView.frame);
-    if (selfHeight == 44)
-    {
-        [self setNeedsLayout];
-    }
     CGFloat y = CGRectGetMinY(self.myContentView.frame);
     for (NSInteger i = 0; i < buttonCount; i++)
     {
@@ -198,7 +197,12 @@
     }];
 }
 
-- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer{
+- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer
+{
+    if (self.buttonArray.count <= 0)
+    {
+        return NO;
+    }
     if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
         CGPoint vTranslationPoint = [gestureRecognizer translationInView:self.contentView];
         return fabs(vTranslationPoint.x) > fabs(vTranslationPoint.y);
@@ -214,28 +218,37 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
+    [self p_setMyContentViewConlor];
     if (selected)
     {
         self.myContentView.backgroundColor = [UIColor lightGrayColor];
     }
     else
     {
-        self.myContentView.backgroundColor = [UIColor whiteColor];
+        self.myContentView.backgroundColor = self.myContentViewColor;
     }
 }
 
 -(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
 {
+    [self p_setMyContentViewConlor];
     if (highlighted)
     {
         self.myContentView.backgroundColor = [UIColor lightGrayColor];
     }
     else
     {
-        self.myContentView.backgroundColor = [UIColor whiteColor];
+        self.myContentView.backgroundColor = self.myContentViewColor;
     }
 }
 
+- (void)p_setMyContentViewConlor
+{
+    if (self.myContentView.backgroundColor !=[UIColor lightGrayColor] && self.myContentViewColor != self.myContentView.backgroundColor)
+    {
+        self.myContentViewColor = self.myContentView.backgroundColor;
+    }
+}
 - (NSMutableArray *)buttonArray
 {
     if (_buttonArray == nil) {
@@ -244,30 +257,54 @@
     return _buttonArray;
 }
 
-- (NSArray *)buttonMessageArray
+- (void)setButtonMessageArray:(NSArray *)buttonMessageArray
 {
-    if(_buttonMessageArray == nil)
-    {
-        _buttonMessageArray = @[@"更多",@"删除",@"添加"];
-    }
-    return _buttonMessageArray;
+    _buttonMessageArray = buttonMessageArray;
+    [self p_creatButtons];
 }
 
 - (UIView *)myContentView
 {
     if (_myContentView == nil) {
         UIView *myContentView = [[UIView alloc] initWithFrame:self.contentView.bounds];
-        myContentView.backgroundColor = [UIColor whiteColor];
+        myContentView.backgroundColor = [UIColor redColor];
         _myContentView = myContentView;
         [self.contentView addSubview:myContentView];
         myContentView.translatesAutoresizingMaskIntoConstraints = NO;
-        NSLayoutConstraint *lcLeft = [NSLayoutConstraint constraintWithItem:myContentView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
-        NSLayoutConstraint *lcTop = [NSLayoutConstraint constraintWithItem:myContentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:5];
-        NSLayoutConstraint *lcRight = [NSLayoutConstraint constraintWithItem:myContentView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0];
-        NSLayoutConstraint *lcBottom = [NSLayoutConstraint constraintWithItem:myContentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-5];
-        [self.contentView addConstraints:@[lcLeft, lcTop, lcRight ,lcBottom]];
-        
+        [self p_setupMyContentViewLayout];
     }
     return _myContentView;
+}
+
+- (void)setMarginBottom:(CGFloat)marginBottom
+{
+    _marginBottom = marginBottom;
+    [self p_setupMyContentViewLayout];
+}
+- (void)setMarginTop:(CGFloat)marginTop
+{
+    _marginTop = marginTop;
+    [self p_setupMyContentViewLayout];
+}
+- (void)p_setupMyContentViewLayout
+{
+    [self.contentView removeConstraints:self.myContentViewLayouts];
+    [self.myContentViewLayouts removeAllObjects];
+    NSLayoutConstraint *Left = [NSLayoutConstraint constraintWithItem:self.myContentView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
+    NSLayoutConstraint *Top = [NSLayoutConstraint constraintWithItem:self.myContentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:self.marginTop];
+    NSLayoutConstraint *Right = [NSLayoutConstraint constraintWithItem:self.myContentView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0];
+    NSLayoutConstraint *Bottom = [NSLayoutConstraint constraintWithItem:self.myContentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-self.marginBottom];
+    [self.contentView addConstraints:@[Left, Top, Right ,Bottom]];
+    [self.myContentViewLayouts addObjectsFromArray:@[Left, Top, Right ,Bottom]];
+    [self setNeedsDisplay];
+    [self setNeedsLayout];
+}
+- (NSMutableArray *)myContentViewLayouts
+{
+    if (_myContentViewLayouts == nil)
+    {
+        _myContentViewLayouts = [NSMutableArray array];
+    }
+    return _myContentViewLayouts;
 }
 @end
