@@ -249,6 +249,7 @@
         self.myContentViewColor = self.myContentView.backgroundColor;
     }
 }
+
 - (NSMutableArray *)buttonArray
 {
     if (_buttonArray == nil) {
@@ -281,11 +282,13 @@
     _marginBottom = marginBottom;
     [self p_setupMyContentViewLayout];
 }
+
 - (void)setMarginTop:(CGFloat)marginTop
 {
     _marginTop = marginTop;
     [self p_setupMyContentViewLayout];
 }
+
 - (void)p_setupMyContentViewLayout
 {
     [self.contentView removeConstraints:self.myContentViewLayouts];
@@ -299,6 +302,7 @@
     [self setNeedsDisplay];
     [self setNeedsLayout];
 }
+
 - (NSMutableArray *)myContentViewLayouts
 {
     if (_myContentViewLayouts == nil)

@@ -94,6 +94,7 @@
         make.bottom.equalTo(self.myContentView.mas_bottom).offset(-panding).priorityLow();
     }];
 }
+
 - (void)setModel:(XXBModel *)model
 {
     _model = model;
@@ -106,12 +107,5 @@
     [super layoutSubviews];
     [self.myContentView setNeedsLayout];
     [self.myContentView layoutIfNeeded];
-    
-//    self.label1.preferredMaxLayoutWidth = CGRectGetWidth(self.label1.frame);
-//    self.label2.preferredMaxLayoutWidth = CGRectGetWidth(self.label2.frame);
-}
-- (void)updateConstraints
-{
-    [super updateConstraints];
 }
 @end
