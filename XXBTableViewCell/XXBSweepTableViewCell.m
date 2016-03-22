@@ -29,31 +29,26 @@
 
 @implementation XXBSweepTableViewCell
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
-    {
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self p_setupSweepTableViewCell];
     }
     return self;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder])
-    {
+    if (self = [super initWithCoder:aDecoder]) {
         [self p_setupSweepTableViewCell];
     }
     return self;
 }
 
-- (void)p_setupSweepTableViewCell
-{
+- (void)p_setupSweepTableViewCell {
     [self p_creatButtons];
     [self p_addGesture];
 }
 
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     [super layoutSubviews];
     [self layoutIfNeeded];
     NSInteger buttonCount = self.buttonArray.count;
@@ -61,30 +56,22 @@
     CGFloat selfWidth = CGRectGetWidth(self.contentView.frame);
     CGFloat selfHeight = CGRectGetHeight(self.myContentView.frame);
     CGFloat y = CGRectGetMinY(self.myContentView.frame);
-    for (NSInteger i = 0; i < buttonCount; i++)
-    {
+    for (NSInteger i = 0; i < buttonCount; i++) {
         button = self.buttonArray[i];
         button.frame = CGRectMake(selfWidth - (i + 1) * ButtonWidth, y, ButtonWidth,selfHeight);
     }
 }
 
-- (void)p_creatButtons
-{
+- (void)p_creatButtons {
     [self.buttonArray makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self.buttonArray removeAllObjects];
-    for (NSObject *obj in self.buttonMessageArray)
-    {
+    for (NSObject *obj in self.buttonMessageArray) {
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button addTarget:self action:@selector(p_buttonClick:) forControlEvents:UIControlEventTouchUpInside];
         if ([obj isKindOfClass:[NSString class]]) {
             [button setTitle:(NSString *)obj forState:UIControlStateNormal];
-        }
-        else
-        {
-            if ([obj isKindOfClass:[UIImage class]])
-            {
-                [button setImage:(UIImage *)obj forState:UIControlStateNormal];
-            }
+        } else if ([obj isKindOfClass:[UIImage class]]) {
+            [button setImage:(UIImage *)obj forState:UIControlStateNormal];
         }
         button.backgroundColor = [UIColor myRandomColor];
         [self.contentView insertSubview:button belowSubview:self.myContentView];
@@ -92,22 +79,18 @@
     }
 }
 
-- (void)p_buttonClick:(UIButton *)clickButton
-{
-    if ([self.delegate respondsToSelector:@selector(tableViewCell:didClickWithButtonIndex:)])
-    {
+- (void)p_buttonClick:(UIButton *)clickButton {
+    if ([self.delegate respondsToSelector:@selector(tableViewCell:didClickWithButtonIndex:)]) {
         [self.delegate tableViewCell:self didClickWithButtonIndex:[self.buttonArray indexOfObject:clickButton]];
     }
 }
 
-- (void)prepareForReuse
-{
+- (void)prepareForReuse {
     [super prepareForReuse];
     self.contentView.clipsToBounds = YES;
 }
 #pragma mark 手势处理
-- (void)p_addGesture
-{
+- (void)p_addGesture {
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     self.panGesture = panGesture;
     panGesture.delegate = self;
@@ -116,28 +99,21 @@
 
 -(void)handlePan:(UIPanGestureRecognizer *)sender{
     switch (sender.state) {
-        case UIGestureRecognizerStateBegan:
-        {
-            
+        case UIGestureRecognizerStateBegan: {
             startLocation = [sender locationInView:self.contentView].x;
             CGFloat direction = [sender velocityInView:self.contentView].x;
             if (direction < 0) {
-                if ([self.delegate respondsToSelector:@selector(tableViewCellWillShow:)])
-                {
+                if ([self.delegate respondsToSelector:@selector(tableViewCellWillShow:)]) {
                     [self.delegate tableViewCellWillShow:self];
                 }
-            }
-            else
-            {
-                if ([self.delegate respondsToSelector:@selector(tableViewCellWillHide:)])
-                {
+            } else {
+                if ([self.delegate respondsToSelector:@selector(tableViewCellWillHide:)]) {
                     [self.delegate tableViewCellWillHide:self];
                 }
             }
             break;
         }
-        case UIGestureRecognizerStateChanged:
-        {
+        case UIGestureRecognizerStateChanged: {
             CGFloat vCurrentLocation = [sender locationInView:self.contentView].x;
             CGFloat vDistance = vCurrentLocation - startLocation;
             startLocation = vCurrentLocation;
@@ -161,8 +137,7 @@
             }
             break;
         }
-        case UIGestureRecognizerStateEnded:
-        {
+        case UIGestureRecognizerStateEnded: {
             [self hideMenuView:hideMenuView Animated:YES];
             break;
         }
@@ -183,39 +158,29 @@
         [self setSelected:NO animated:NO];
     }
     CGRect vDestinaRect = CGRectZero;
-    if (isHiden)
-    {
+    if (isHiden) {
         vDestinaRect = CGRectMake(0, self.myContentView.frame.origin.y, self.myContentView.frame.size.width, self.myContentView.frame.size.height);;
-    }
-    else
-    {
+    } else {
         vDestinaRect = CGRectMake(-[self getMenusWidth], self.myContentView.frame.origin.y, self.myContentView.frame.size.width, self.myContentView.frame.size.height);
     }
     CGFloat vDuration = aAnimate? 0.25 : 0.0;
     [UIView animateWithDuration:vDuration animations:^{
         self.myContentView.frame = vDestinaRect;
     } completion:^(BOOL finished) {
-        if (isHiden)
-        {
-            if ([self.delegate respondsToSelector:@selector(tableViewCellDidHide:)])
-            {
+        if (isHiden) {
+            if ([self.delegate respondsToSelector:@selector(tableViewCellDidHide:)]) {
                 [self.delegate tableViewCellDidHide:self];
             }
-        }
-        else
-        {
-            if ([self.delegate respondsToSelector:@selector(tableViewCellDidShow:)])
-            {
+        } else {
+            if ([self.delegate respondsToSelector:@selector(tableViewCellDidShow:)]) {
                 [self.delegate tableViewCellDidShow:self];
             }
         }
     }];
 }
 
-- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer
-{
-    if (self.buttonArray.count <= 0)
-    {
+- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer {
+    if (self.buttonArray.count <= 0) {
         return NO;
     }
     if ([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
@@ -225,62 +190,48 @@
     return YES;
 }
 
-- (CGFloat)getMenusWidth
-{
+- (CGFloat)getMenusWidth {
     return ButtonWidth * self.buttonArray.count;
 }
 #pragma mark - 一些系统方法的重写
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [self p_setMyContentViewConlor];
-    if (selected)
-    {
+    if (selected) {
         self.myContentView.backgroundColor = [UIColor lightGrayColor];
-    }
-    else
-    {
+    } else {
         self.myContentView.backgroundColor = self.myContentViewColor;
     }
 }
 
--(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated
-{
+-(void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
     [self p_setMyContentViewConlor];
-    if (highlighted)
-    {
+    if (highlighted) {
         self.myContentView.backgroundColor = [UIColor lightGrayColor];
-    }
-    else
-    {
+    } else {
         self.myContentView.backgroundColor = self.myContentViewColor;
     }
 }
 
-- (void)p_setMyContentViewConlor
-{
-    if (self.myContentView.backgroundColor !=[UIColor lightGrayColor] && self.myContentViewColor != self.myContentView.backgroundColor)
-    {
+- (void)p_setMyContentViewConlor {
+    if (self.myContentView.backgroundColor !=[UIColor lightGrayColor] && self.myContentViewColor != self.myContentView.backgroundColor) {
         self.myContentViewColor = self.myContentView.backgroundColor;
     }
 }
 
-- (NSMutableArray *)buttonArray
-{
+- (NSMutableArray *)buttonArray {
     if (_buttonArray == nil) {
         _buttonArray = [NSMutableArray array];
     }
     return _buttonArray;
 }
 
-- (void)setButtonMessageArray:(NSArray *)buttonMessageArray
-{
+- (void)setButtonMessageArray:(NSArray *)buttonMessageArray {
     _buttonMessageArray = buttonMessageArray;
     [self p_creatButtons];
 }
 
-- (UIView *)myContentView
-{
+- (UIView *)myContentView {
     if (_myContentView == nil) {
         UIView *myContentView = [[UIView alloc] initWithFrame:self.contentView.bounds];
         myContentView.backgroundColor = [UIColor whiteColor];
@@ -292,20 +243,17 @@
     return _myContentView;
 }
 
-- (void)setMarginBottom:(CGFloat)marginBottom
-{
+- (void)setMarginBottom:(CGFloat)marginBottom {
     _marginBottom = marginBottom;
     [self p_setupMyContentViewLayout];
 }
 
-- (void)setMarginTop:(CGFloat)marginTop
-{
+- (void)setMarginTop:(CGFloat)marginTop {
     _marginTop = marginTop;
     [self p_setupMyContentViewLayout];
 }
 
-- (void)p_setupMyContentViewLayout
-{
+- (void)p_setupMyContentViewLayout {
     [self.contentView removeConstraints:self.myContentViewLayouts];
     [self.myContentViewLayouts removeAllObjects];
     NSLayoutConstraint *Left = [NSLayoutConstraint constraintWithItem:self.myContentView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
@@ -318,12 +266,11 @@
     [self setNeedsLayout];
 }
 
-- (NSMutableArray *)myContentViewLayouts
-{
-    if (_myContentViewLayouts == nil)
-    {
+- (NSMutableArray *)myContentViewLayouts {
+    if (_myContentViewLayouts == nil) {
         _myContentViewLayouts = [NSMutableArray array];
     }
     return _myContentViewLayouts;
 }
+
 @end
