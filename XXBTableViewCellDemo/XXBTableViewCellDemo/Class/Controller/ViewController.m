@@ -68,6 +68,9 @@
     cell.delegate = self;
     return cell;
 }
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
 
 - (NSMutableArray *)dataSourceArray
 {

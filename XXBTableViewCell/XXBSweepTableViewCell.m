@@ -147,15 +147,17 @@
             vOriginX = MIN(0 + Bounds, vOriginX);
             self.myContentView.frame = CGRectMake(vOriginX, vCurrentRect.origin.y, vCurrentRect.size.width, vCurrentRect.size.height);
             CGFloat direction = [sender velocityInView:self.contentView].x;
-            if (direction < -40.0 || vOriginX <  - (0.5 * [self getMenusWidth])) {
+            NSLog(@"%@",@(direction));
+            if ( direction < -40 ) {
                 hideMenuView = NO;
-            }
-            else
-            {
-                if(direction > 20.0 || vOriginX >  - (0.5 * (ButtonWidth * self.buttonArray.count)))
-                {
-                    hideMenuView = YES;
-                }
+            } else if ( direction > 40 ) {
+                hideMenuView = YES;
+            } else if ( vOriginX <  - (0.5 * [self getMenusWidth]) ) {
+                hideMenuView = NO;
+            } else if ( vOriginX >  - (0.5 * (ButtonWidth * self.buttonArray.count)) ) {
+                hideMenuView = YES;
+            } else {
+                hideMenuView = NO;
             }
             break;
         }
