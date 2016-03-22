@@ -33,10 +33,23 @@
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])
     {
-        [self p_creatButtons];
-        [self p_addGesture];
+        [self p_setupSweepTableViewCell];
     }
     return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder])
+    {
+        [self p_setupSweepTableViewCell];
+    }
+    return self;
+}
+
+- (void)p_setupSweepTableViewCell
+{
+    [self p_creatButtons];
+    [self p_addGesture];
 }
 
 - (void)layoutSubviews
