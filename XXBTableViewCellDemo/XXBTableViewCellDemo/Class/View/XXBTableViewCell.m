@@ -39,6 +39,8 @@
 
 - (void)p_creatTableView
 {
+    self.marginTop = 8;
+    self.marginBottom = 0;
     self.myContentView.clipsToBounds = YES;
     UILabel *label1 = [UILabel new];
     [self.myContentView addSubview:label1];

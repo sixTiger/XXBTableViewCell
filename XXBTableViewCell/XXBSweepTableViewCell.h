@@ -21,7 +21,7 @@
 @interface XXBSweepTableViewCell : UITableViewCell
 @property(nonatomic , weak) id<XXBSweepTableViewCellDelegate>   delegate;
 /**
- *  cell上边的按钮的一些信息，可以是标题，或者图片
+ *  cell上边的按钮的一些信息，可以是标题，或者图片 按照顺序从左到右的
  */
 @property(nonatomic , strong) NSArray                           *buttonMessageArray;
 /**

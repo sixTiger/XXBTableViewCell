@@ -59,14 +59,6 @@
 }
 - (void)configureCell:(XXBTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row < [self.dataSourceArray[indexPath.section] count] - 1)
-    {
-        cell.marginBottom = 20;
-    }
-    else
-    {
-        cell.marginBottom = 0;
-    }
     cell.model = self.dataSourceArray[indexPath.section][indexPath.row];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -75,14 +67,6 @@
     cell.contentView.backgroundColor = [UIColor lightGrayColor];
     cell.model = self.dataSourceArray[indexPath.section][indexPath.row];
     cell.delegate = self;
-    if (indexPath.row < [self.dataSourceArray[indexPath.section] count] - 1)
-    {
-        cell.marginBottom = 20;
-    }
-    else
-    {
-        cell.marginBottom = 0;
-    }
     return cell;
 }
 
@@ -144,5 +128,12 @@
 - (void)tableViewCellDidHide:(XXBSweepTableViewCell *)cell
 {
     self.selectCell = nil;
+}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if ([[self.tableView visibleCells] indexOfObject:self.selectCell] == NSNotFound)
+    {
+        self.selectCell = nil;
+    }
 }
 @end
