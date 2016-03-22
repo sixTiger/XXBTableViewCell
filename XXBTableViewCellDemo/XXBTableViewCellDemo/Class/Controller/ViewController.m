@@ -64,7 +64,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     XXBTableViewCell *cell = [[XXBTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-    cell.contentView.backgroundColor = [UIColor lightGrayColor];
     cell.model = self.dataSourceArray[indexPath.section][indexPath.row];
     cell.delegate = self;
     return cell;
@@ -131,7 +130,11 @@
 }
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if ([[self.tableView visibleCells] indexOfObject:self.selectCell] == NSNotFound)
+    if (self.selectCell != nil) {
+        [self.selectCell hideMenuView:YES Animated:YES];
+        self.selectCell = nil;
+    }
+    if (self.selectCell && [[self.tableView visibleCells] indexOfObject:self.selectCell] == NSNotFound)
     {
         self.selectCell = nil;
     }

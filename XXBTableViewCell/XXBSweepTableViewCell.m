@@ -268,7 +268,7 @@
 {
     if (_myContentView == nil) {
         UIView *myContentView = [[UIView alloc] initWithFrame:self.contentView.bounds];
-        myContentView.backgroundColor = [UIColor redColor];
+        myContentView.backgroundColor = [UIColor whiteColor];
         _myContentView = myContentView;
         [self.contentView addSubview:myContentView];
         myContentView.translatesAutoresizingMaskIntoConstraints = NO;

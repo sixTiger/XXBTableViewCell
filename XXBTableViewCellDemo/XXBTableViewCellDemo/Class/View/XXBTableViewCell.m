@@ -59,7 +59,7 @@
     [self.myContentView addSubview:label3];
     
     UIImageView *imageView = [UIImageView new];
-    imageView.backgroundColor = [UIColor redColor];
+    imageView.backgroundColor = [UIColor clearColor];
     [self.myContentView addSubview:imageView];
     
     _label1 = label1;
