@@ -66,6 +66,9 @@
     XXBTableViewCell *cell = [[XXBTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     cell.model = self.dataSourceArray[indexPath.section][indexPath.row];
     cell.delegate = self;
+    if (indexPath.row % 2) {
+        cell.shouldShowMenu = NO;
+    }
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -44,6 +44,7 @@
 }
 
 - (void)p_setupSweepTableViewCell {
+    _shouldShowMenu = YES;
     [self p_creatButtons];
     [self p_addGesture];
 }
@@ -118,12 +119,16 @@
             CGFloat vDistance = vCurrentLocation - startLocation;
             startLocation = vCurrentLocation;
             CGRect vCurrentRect = self.myContentView.frame;
-            CGFloat vOriginX = MAX(-[self getMenusWidth] - Bounds, vCurrentRect.origin.x + vDistance);
+            CGFloat vOriginX = 0.0;
+            if (self.shouldShowMenu) {
+                vOriginX = MAX( -[self getMenusWidth] - Bounds, vCurrentRect.origin.x + vDistance);
+            } else {
+                vOriginX = MAX( - Bounds, vCurrentRect.origin.x + vDistance);
+            }
             
             vOriginX = MIN(0 + Bounds, vOriginX);
             self.myContentView.frame = CGRectMake(vOriginX, vCurrentRect.origin.y, vCurrentRect.size.width, vCurrentRect.size.height);
             CGFloat direction = [sender velocityInView:self.contentView].x;
-            NSLog(@"%@",@(direction));
             if ( direction < -40 ) {
                 hideMenuView = NO;
             } else if ( direction > 40 ) {
@@ -134,6 +139,9 @@
                 hideMenuView = YES;
             } else {
                 hideMenuView = NO;
+            }
+            if ( !self.shouldShowMenu ) {
+                hideMenuView = YES ;
             }
             break;
         }

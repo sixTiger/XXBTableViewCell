@@ -19,23 +19,34 @@
 @end
 
 @interface XXBSweepTableViewCell : UITableViewCell
+
 @property(nonatomic , weak) id<XXBSweepTableViewCellDelegate>   delegate;
+
 /**
  *  cell上边的按钮的一些信息，可以是标题，或者图片 按照顺序从左到右的
  */
 @property(nonatomic , strong) NSArray                           *buttonMessageArray;
+
 /**
  *  主要用于添加控件
  */
 @property(nonatomic , weak , readonly) UIView                   *myContentView;
+
 /**
  *  距离顶部的边距
  */
 @property(nonatomic , assign) CGFloat                           marginTop;
+
 /**
  *  距离底部的边距
  */
 @property(nonatomic , assign) CGFloat                           marginBottom;
+
+/**
+ *  距离底部的边距
+ */
+@property(nonatomic , assign) BOOL                              shouldShowMenu;
+
 /**
  *  隐藏已经显示按钮菜单的View
  *
