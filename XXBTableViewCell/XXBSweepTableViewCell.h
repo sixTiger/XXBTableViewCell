@@ -47,6 +47,10 @@
  */
 @property(nonatomic , assign) BOOL                              shouldShowMenu;
 
+@property(nonatomic, assign) BOOL                               alwaysBounceVerticalRight;
+@property(nonatomic, assign) BOOL                               alwaysBounceVerticalLeft;
+
+
 /**
  *  隐藏已经显示按钮菜单的View
  *

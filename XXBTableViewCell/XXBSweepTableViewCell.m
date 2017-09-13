@@ -10,8 +10,8 @@
 #import <XXBLibs.h>
 #import <Masonry.h>
 #import <ReactiveCocoa.h>
-#define ButtonWidth     80
-#define Bounds          10
+#define XXBSweepCellActionButtonWidth     80
+#define XXBSweepCellActionBounds          10
 @interface XXBSweepTableViewCell ()<UIGestureRecognizerDelegate>
 {
     CGFloat                     startLocation;
@@ -51,15 +51,13 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self layoutIfNeeded];
     NSInteger buttonCount = self.buttonArray.count;
     UIButton *button;
     CGFloat selfWidth = CGRectGetWidth(self.contentView.frame);
-    CGFloat selfHeight = CGRectGetHeight(self.myContentView.frame);
-    CGFloat y = CGRectGetMinY(self.myContentView.frame);
+    CGFloat selfHeight = CGRectGetHeight(self.contentView.frame);
     for (NSInteger i = 0; i < buttonCount; i++) {
         button = self.buttonArray[i];
-        button.frame = CGRectMake(selfWidth - (i + 1) * ButtonWidth, y, ButtonWidth,selfHeight);
+        button.frame = CGRectMake(selfWidth - (i + 1) * XXBSweepCellActionButtonWidth, self.marginTop, XXBSweepCellActionButtonWidth,selfHeight - self.marginTop - self.marginBottom);
     }
 }
 
@@ -121,21 +119,21 @@
             CGRect vCurrentRect = self.myContentView.frame;
             CGFloat vOriginX = 0.0;
             if (self.shouldShowMenu) {
-                vOriginX = MAX( -[self getMenusWidth] - Bounds, vCurrentRect.origin.x + vDistance);
+                vOriginX = MAX( - [self getMenusWidth] - XXBSweepCellActionBounds * self.alwaysBounceVerticalRight, vCurrentRect.origin.x + vDistance);
             } else {
-                vOriginX = MAX( - Bounds, vCurrentRect.origin.x + vDistance);
+                vOriginX = MAX( - self.alwaysBounceVerticalRight * XXBSweepCellActionBounds, vCurrentRect.origin.x + vDistance);
             }
             
-            vOriginX = MIN(0 + Bounds, vOriginX);
+            vOriginX = MIN(self.alwaysBounceVerticalLeft * XXBSweepCellActionBounds, vOriginX);
             self.myContentView.frame = CGRectMake(vOriginX, vCurrentRect.origin.y, vCurrentRect.size.width, vCurrentRect.size.height);
             CGFloat direction = [sender velocityInView:self.contentView].x;
-            if ( direction < -40 ) {
+            if ( direction < -XXBSweepCellActionButtonWidth * 0.5 ) {
                 hideMenuView = NO;
-            } else if ( direction > 40 ) {
+            } else if ( direction > XXBSweepCellActionButtonWidth * 0.5 ) {
                 hideMenuView = YES;
             } else if ( vOriginX <  - (0.5 * [self getMenusWidth]) ) {
                 hideMenuView = NO;
-            } else if ( vOriginX >  - (0.5 * (ButtonWidth * self.buttonArray.count)) ) {
+            } else if ( vOriginX >  - (0.5 * (XXBSweepCellActionButtonWidth * self.buttonArray.count)) ) {
                 hideMenuView = YES;
             } else {
                 hideMenuView = NO;
@@ -149,7 +147,6 @@
             [self hideMenuView:hideMenuView Animated:YES];
             break;
         }
-            
         default:
             break;
     }
@@ -199,7 +196,7 @@
 }
 
 - (CGFloat)getMenusWidth {
-    return ButtonWidth * self.buttonArray.count;
+    return XXBSweepCellActionButtonWidth * self.buttonArray.count;
 }
 #pragma mark - 一些系统方法的重写
 
@@ -270,6 +267,7 @@
     NSLayoutConstraint *Bottom = [NSLayoutConstraint constraintWithItem:self.myContentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-self.marginBottom];
     [self.contentView addConstraints:@[Left, Top, Right ,Bottom]];
     [self.myContentViewLayouts addObjectsFromArray:@[Left, Top, Right ,Bottom]];
+    [self.myContentView updateConstraints];
     [self setNeedsDisplay];
     [self setNeedsLayout];
 }

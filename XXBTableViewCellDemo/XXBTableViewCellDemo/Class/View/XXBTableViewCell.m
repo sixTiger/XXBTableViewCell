@@ -39,6 +39,8 @@
 
 - (void)p_creatTableView
 {
+    self.alwaysBounceVerticalLeft = true;
+    self.alwaysBounceVerticalRight = true;
     self.marginTop = 8;
     self.marginBottom = 0;
     self.myContentView.clipsToBounds = YES;
